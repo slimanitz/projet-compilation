@@ -1,11 +1,6 @@
 #include<stdio.h>
 #include <stdlib.h>
 #include <string.h>
-
-
-
-
-
 struct Automate
 {
     int nbEtats;
@@ -16,25 +11,29 @@ struct Automate
         int prochainEtat;
     } transitions[30];
 };
+struct Automate automate;
 
+
+void parseAutomate(char *nomAutomate);
 
 
 
 
 int main(int argc, char *argv[]) {
+    char *nomAutomate = argv[1];
+    parseAutomate(nomAutomate);
+    return 0;
+}
 
 
 
-    char *nomAutomates = argv[1];
-    struct Automate automate;
-
-
-     FILE *file = fopen(nomAutomates, "r");
+void parseAutomate(char *nomAutomate){
+    FILE *file = fopen(nomAutomate, "r");
 
     // Check if the file was successfully opened
     if (file == NULL) {
         perror("Error opening file");
-        return -1;
+        return ;
     }
 
     // Declare a buffer for reading the file
@@ -108,16 +107,5 @@ int main(int argc, char *argv[]) {
     // Close the file
     fclose(file);
 
- 
 
-
-
-
-
-
-
-
-
-
-    return 0;
 }
