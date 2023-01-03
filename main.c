@@ -5,7 +5,8 @@ struct Automate
 {
     int nbEtats;
     int etatsAccepteurs[20];
-    struct Transitions{
+    int nbTransitions;
+    struct Transition{
         int etatDeparts;
         char *transition;
         int prochainEtat;
@@ -15,6 +16,7 @@ struct Automate automate;
 
 
 void parseAutomate(char *nomAutomate);
+void executionAutomateSurMot(char *mot);
 
 
 
@@ -22,11 +24,57 @@ void parseAutomate(char *nomAutomate);
 int main(int argc, char *argv[]) {
     char *nomAutomate = argv[1];
     parseAutomate(nomAutomate);
+    executionAutomateSurMot("aa");
+
     return 0;
 }
 
 
+int checkIfTransitionPass(char c,int etat){
+    for (int i = 0; i < automate.nbTransitions; i++)
+    {
+        printf("Here: %d,There: %d\n",i,automate.nbTransitions);
 
+        if(etat == automate.transitions[i].etatDeparts){
+            if(c == automate.transitions[i].transition){
+                printf("L'etat: %d, fait passer la lettre: %c\n",etat,c);
+                return 1;
+            }
+
+        }
+        else if(etat < automate.transitions[i].etatDeparts){
+            printf("L'etat: %d, ne fait pas  passer la lettre: %c\n",etat,c);
+            return 0;
+        }
+    }
+    
+    
+} 
+
+
+
+void executionAutomateSurMot(char *mot){
+  char lettreMot[strlen(mot) + 1];
+  strcpy(lettreMot, mot);
+  int i = 0;
+  int result = 1;
+  while (sizeof(lettreMot) > i && result != 0)
+  {
+    printf("Here\n");
+    result = checkIfTransitionPass(lettreMot[i],i);
+    i++;
+    /* code */
+  }
+  
+  
+
+
+}
+
+// int checkIfAccepteur(int numeroEtat){
+
+
+// }
 void parseAutomate(char *nomAutomate){
     FILE *file = fopen(nomAutomate, "r");
 
@@ -70,6 +118,7 @@ void parseAutomate(char *nomAutomate){
             printf("\n");
         }
         if(i>=2){
+            automate.nbTransitions++;
             char *token = strtok(line, " ");
             int j = 0;
             while (token != NULL) {
