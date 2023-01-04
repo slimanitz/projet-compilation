@@ -70,3 +70,80 @@ void displayFirstAcceptedState(FirstAcceptedState *first_accepted_state)
         state = state->next;
     }
 }
+
+
+
+FirstTransition *initTransitions()
+{
+    FirstTransition *first_transition = malloc(sizeof(*first_transition));
+    Transitions *transitions = malloc(sizeof(*transitions));
+
+    if (first_transition == NULL || transitions == NULL)
+    {
+        exit(EXIT_FAILURE);
+    }
+
+    transitions->etatDeparts = 0;
+    transitions->transition = 0;
+    transitions->prochainEtat = 0;
+    transitions->next = NULL;
+    first_transition->first = transitions;
+
+    return first_transition;
+}
+
+// Function that insert an acceted state in the
+void insertTransitions(FirstTransition *first_transition, int etatDeparts,char *transition,int prochainEtat)
+{
+    /* Création du nouvel élément */
+    Transitions *new = malloc(sizeof(*new));
+    if (first_transition == NULL || first_transition == NULL)
+    {
+        exit(EXIT_FAILURE);
+    }
+    new->etatDeparts = etatDeparts;
+    new->prochainEtat = prochainEtat;
+    new->transition = transition;
+
+
+
+    /* Insertion de l'élément au début de la first_accepted_statee */
+    new->next = first_transition->first;
+    first_transition->first = new;
+    first_transition->list_size = first_transition->list_size + 1;
+}
+
+// Function that deletes the first element of the first_accepted_state
+void deleteTransition(FirstTransition *first_transition)
+{
+    if (first_transition == NULL)
+    {
+        exit(EXIT_FAILURE);
+    }
+
+    if (first_transition->first != NULL)
+    {
+        Transitions *to_delete = first_transition->first;
+        first_transition->first = first_transition->first->next;
+        free(to_delete);
+        first_transition->list_size = first_transition->list_size - 1;
+    }
+}
+
+// Fucntion to display the element of the first_accepted_state
+void displayTransitions(FirstTransition *first_transition)
+{
+    if (first_transition == NULL)
+    {
+        exit(EXIT_FAILURE);
+    }
+
+    Transitions *transition = first_transition->first;
+
+    while (transition != NULL)
+    {
+        printf("De l'état %d a %d on a %s\n", transition->etatDeparts, transition->prochainEtat, transition->transition);
+        transition = transition->next;
+    }
+}
+

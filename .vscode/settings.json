@@ -1,5 +1,7 @@
 {
-    "files.associations": {
-        "__config": "c"
-    }
+  "files.associations": {
+    ".sequelizerc": "code-text-binary",
+    "__config": "c",
+    "datatypes.h": "c"
+  }
 }

@@ -9,12 +9,13 @@ struct Automate
     FirstAcceptedState *first_accepted_state;
     // int etatsAccepteurs[20];
     int nbTransitions;
-    struct Transition
-    {
-        int etatDeparts;
-        char *transition;
-        int prochainEtat;
-    } transitions[30];
+    FirstTransition *first_transition;
+    // struct Transition
+    // {
+    //     int etatDeparts;
+    //     char *transition;
+    //     int prochainEtat;
+    // } transitions[30];
 };
 struct Automate automate;
 
@@ -25,49 +26,49 @@ int main(int argc, char *argv[])
 {
     char *nomAutomate = argv[1];
     parseAutomate(nomAutomate);
-    executionAutomateSurMot("aa");
+    //executionAutomateSurMot("aa");
 
     return 0;
 }
 
-int checkIfTransitionPass(char *c, int etat)
-{
-    for (int i = 0; i < automate.nbTransitions; i++)
-    {
-        printf("Here: %d,There: %d\n", i, automate.nbTransitions);
+// int checkIfTransitionPass(char *c, int etat)
+// {
+//     for (int i = 0; i < automate.nbTransitions; i++)
+//     {
+//         printf("Here: %d,There: %d\n", i, automate.nbTransitions);
 
-        if (etat == automate.transitions[i].etatDeparts)
-        {
-            if (strcmp(c, automate.transitions[i].transition))
-            {
-                printf("L'etat: %d, fait passer la lettre: %c\n", etat, *c);
-                return 1;
-            }
-        }
-        else if (etat < automate.transitions[i].etatDeparts)
-        {
-            printf("L'etat: %d, ne fait pas  passer la lettre: %c\n", etat, *c);
-            return 0;
-        }
-    }
+//         if (etat == automate.transitions[i].etatDeparts)
+//         {
+//             if (strcmp(c, automate.transitions[i].transition))
+//             {
+//                 printf("L'etat: %d, fait passer la lettre: %c\n", etat, *c);
+//                 return 1;
+//             }
+//         }
+//         else if (etat < automate.transitions[i].etatDeparts)
+//         {
+//             printf("L'etat: %d, ne fait pas  passer la lettre: %c\n", etat, *c);
+//             return 0;
+//         }
+//     }
 
-    return 0;
-}
+//     return 0;
+// }
 
-void executionAutomateSurMot(char *mot)
-{
-    char lettreMot[strlen(mot) + 1];
-    strcpy(lettreMot, mot);
-    int i = 0;
-    int result = 1;
-    while (sizeof(lettreMot) > i && result != 0)
-    {
-        printf("Here\n");
-        result = checkIfTransitionPass(&lettreMot[i], i);
-        i++;
-        /* code */
-    }
-}
+// void executionAutomateSurMot(char *mot)
+// {
+//     char lettreMot[strlen(mot) + 1];
+//     strcpy(lettreMot, mot);
+//     int i = 0;
+//     int result = 1;
+//     while (sizeof(lettreMot) > i && result != 0)
+//     {
+//         printf("Here\n");
+//         result = checkIfTransitionPass(&lettreMot[i], i);
+//         i++;
+//         /* code */
+//     }
+// }
 
 // int checkIfAccepteur(int numeroEtat){
 
@@ -76,6 +77,7 @@ void parseAutomate(char *nomAutomate)
 {
     FILE *file = fopen(nomAutomate, "r");
     automate.first_accepted_state = malloc(sizeof(*automate.first_accepted_state));
+    automate.first_transition = malloc(sizeof(*automate.first_transition));
     // Check if the file was successfully opened
     if (file == NULL)
     {
@@ -108,7 +110,6 @@ void parseAutomate(char *nomAutomate)
                     token[len - 1] = '\0';
                 }
                 insertion(automate.first_accepted_state, atoi(token));  
-                
                 token = strtok(NULL, " ");                          // Get the next token (word)
                 j++;
             }
@@ -121,6 +122,9 @@ void parseAutomate(char *nomAutomate)
             automate.nbTransitions++;
             char *token = strtok(line, " ");
             int j = 0;
+            int etatDeparts =0;
+            int prochainEtat =0;
+            char *transition="";
             while (token != NULL)
             {
                 int len = strlen(token);
@@ -131,13 +135,13 @@ void parseAutomate(char *nomAutomate)
                 switch (j)
                 {
                 case 0:
-                    automate.transitions[i - 2].etatDeparts = atoi(token);
+                    etatDeparts = atoi(token);
                     break;
                 case 1:
-                    automate.transitions[i - 2].transition = token;
+                    transition = token;
                     break;
                 case 2:
-                    automate.transitions[i - 2].prochainEtat = atoi(token);
+                    prochainEtat = atoi(token);
                     break;
 
                 default:
@@ -146,14 +150,13 @@ void parseAutomate(char *nomAutomate)
                 token = strtok(NULL, " "); // Get the next token (word)
                 j++;
             }
+            insertTransitions(automate.first_transition,etatDeparts,transition,prochainEtat);
         }
         i++;
     }
     printf("Les transitions sont: \n");
-    for (int i = 0; i < automate.nbEtats - 1; i++)
-    {
-        printf("De l'état %d a %d on a %s\n", automate.transitions[i].etatDeparts, automate.transitions[i].prochainEtat, automate.transitions[i].transition);
-    }
-    // Close the file
+    displayTransitions(automate.first_transition);
     fclose(file);
 }
+
+
