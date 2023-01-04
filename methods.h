@@ -29,7 +29,7 @@ void insertion(Item *item, int new_state)
     {
         exit(EXIT_FAILURE);
     }
-    new->state = new;
+    new->state = new_state;
 
     /* Insertion de l'élément au début de la iteme */
     new->next = item->first;
@@ -69,5 +69,4 @@ void displayItem(Item *item)
         printf("%d ", state->state);
         state = state->next;
     }
-    printf("NULL\n");
 }

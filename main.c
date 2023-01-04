@@ -1,7 +1,6 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
-#include "datatypes.h"
 #include "methods.h"
 
 struct Automate
@@ -39,18 +38,20 @@ int checkIfTransitionPass(char *c, int etat)
 
         if (etat == automate.transitions[i].etatDeparts)
         {
-            if (c == automate.transitions[i].transition)
+            if (strcmp(c, automate.transitions[i].transition))
             {
-                printf("L'etat: %d, fait passer la lettre: %c\n", etat, c);
+                printf("L'etat: %d, fait passer la lettre: %c\n", etat, *c);
                 return 1;
             }
         }
         else if (etat < automate.transitions[i].etatDeparts)
         {
-            printf("L'etat: %d, ne fait pas  passer la lettre: %c\n", etat, c);
+            printf("L'etat: %d, ne fait pas  passer la lettre: %c\n", etat, *c);
             return 0;
         }
     }
+
+    return 0;
 }
 
 void executionAutomateSurMot(char *mot)
@@ -62,7 +63,7 @@ void executionAutomateSurMot(char *mot)
     while (sizeof(lettreMot) > i && result != 0)
     {
         printf("Here\n");
-        result = checkIfTransitionPass(lettreMot[i], i);
+        result = checkIfTransitionPass(&lettreMot[i], i);
         i++;
         /* code */
     }
@@ -106,18 +107,13 @@ void parseAutomate(char *nomAutomate)
                 {
                     token[len - 1] = '\0';
                 }
-                insertion(automate.accepted_state,atoi(token));
-                // automate.etatsAccepteurs[j] = atoi(token); // add the token to the list and convert it to an INT
-                token = strtok(NULL, " ");                 // Get the next token (word)
+                insertion(automate.accepted_state, atoi(token));  
+                
+                token = strtok(NULL, " ");                          // Get the next token (word)
                 j++;
             }
-            // int n = sizeof(automate.etatsAccepteurs) / sizeof(automate.etatsAccepteurs[0]);
             printf("Les etats accepteurs sont: ");
             displayItem(automate.accepted_state);
-            // for (int i = 0; i < n; i++)
-            // {
-            //     printf("%d ", automate.etatsAccepteurs[i]);
-            // }
             printf("\n");
         }
         if (i >= 2)
