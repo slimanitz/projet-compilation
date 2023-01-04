@@ -1,6 +1,6 @@
 #include <stdio.h>
 #include <stdlib.h>
-#include <datatypes.h>
+#include "datatypes.h"
 
 // Function that initialises an EtatAccepteur datatype
 Item *initialisation()

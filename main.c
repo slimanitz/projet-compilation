@@ -1,8 +1,8 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
-#include <datatypes.h>
-#include <methods.h>
+#include "datatypes.h"
+#include "methods.h"
 
 struct Automate
 {

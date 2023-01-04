@@ -1,7 +1,7 @@
 struct AcceptedStates
 {
     int state;
-    AcceptedStates *next;
+    struct AcceptedStates *next;
 };
 typedef struct AcceptedStates AcceptedStates;
 
@@ -9,7 +9,7 @@ typedef struct AcceptedStates AcceptedStates;
 struct Item
 {
     AcceptedStates *first;
-    int list_size = 0;
+    int list_size;
 };
 typedef struct Item Item;
 
