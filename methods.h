@@ -3,66 +3,66 @@
 #include "datatypes.h"
 
 // Function that initialises an EtatAccepteur datatype
-Item *initialisation()
+FirstAcceptedState *initialisation()
 {
-    Item *item = malloc(sizeof(*item));
+    FirstAcceptedState *first_accepted_state = malloc(sizeof(*first_accepted_state));
     AcceptedStates *accepted_states = malloc(sizeof(*accepted_states));
 
-    if (item == NULL || accepted_states == NULL)
+    if (first_accepted_state == NULL || accepted_states == NULL)
     {
         exit(EXIT_FAILURE);
     }
 
     accepted_states->state = 0;
     accepted_states->next = NULL;
-    item->first = accepted_states;
+    first_accepted_state->first = accepted_states;
 
-    return item;
+    return first_accepted_state;
 }
 
 // Function that insert an acceted state in the
-void insertion(Item *item, int new_state)
+void insertion(FirstAcceptedState *first_accepted_state, int new_state)
 {
     /* Création du nouvel élément */
     AcceptedStates *new = malloc(sizeof(*new));
-    if (item == NULL || new == NULL)
+    if (first_accepted_state == NULL || new == NULL)
     {
         exit(EXIT_FAILURE);
     }
     new->state = new_state;
 
-    /* Insertion de l'élément au début de la iteme */
-    new->next = item->first;
-    item->first = new;
-    item->list_size = item->list_size + 1;
+    /* Insertion de l'élément au début de la first_accepted_statee */
+    new->next = first_accepted_state->first;
+    first_accepted_state->first = new;
+    first_accepted_state->list_size = first_accepted_state->list_size + 1;
 }
 
-// Function that deletes the first element of the item
-void deletion(Item *item)
+// Function that deletes the first element of the first_accepted_state
+void deletion(FirstAcceptedState *first_accepted_state)
 {
-    if (item == NULL)
+    if (first_accepted_state == NULL)
     {
         exit(EXIT_FAILURE);
     }
 
-    if (item->first != NULL)
+    if (first_accepted_state->first != NULL)
     {
-        AcceptedStates *to_delete = item->first;
-        item->first = item->first->next;
+        AcceptedStates *to_delete = first_accepted_state->first;
+        first_accepted_state->first = first_accepted_state->first->next;
         free(to_delete);
-        item->list_size = item->list_size - 1;
+        first_accepted_state->list_size = first_accepted_state->list_size - 1;
     }
 }
 
-// Fucntion to display the element of the item
-void displayItem(Item *item)
+// Fucntion to display the element of the first_accepted_state
+void displayFirstAcceptedState(FirstAcceptedState *first_accepted_state)
 {
-    if (item == NULL)
+    if (first_accepted_state == NULL)
     {
         exit(EXIT_FAILURE);
     }
 
-    AcceptedStates *state = item->first;
+    AcceptedStates *state = first_accepted_state->first;
 
     while (state != NULL)
     {

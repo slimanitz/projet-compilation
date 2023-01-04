@@ -6,10 +6,10 @@ struct AcceptedStates
 typedef struct AcceptedStates AcceptedStates;
 
 
-struct Item
+struct FirstAcceptedState
 {
     AcceptedStates *first;
     int list_size;
 };
-typedef struct Item Item;
+typedef struct FirstAcceptedState FirstAcceptedState;
 

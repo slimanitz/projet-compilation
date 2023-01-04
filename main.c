@@ -6,7 +6,7 @@
 struct Automate
 {
     int nbEtats;
-    Item *accepted_state;
+    FirstAcceptedState *first_accepted_state;
     // int etatsAccepteurs[20];
     int nbTransitions;
     struct Transition
@@ -75,7 +75,7 @@ void executionAutomateSurMot(char *mot)
 void parseAutomate(char *nomAutomate)
 {
     FILE *file = fopen(nomAutomate, "r");
-    automate.accepted_state = malloc(sizeof(*automate.accepted_state));
+    automate.first_accepted_state = malloc(sizeof(*automate.first_accepted_state));
     // Check if the file was successfully opened
     if (file == NULL)
     {
@@ -107,13 +107,13 @@ void parseAutomate(char *nomAutomate)
                 {
                     token[len - 1] = '\0';
                 }
-                insertion(automate.accepted_state, atoi(token));  
+                insertion(automate.first_accepted_state, atoi(token));  
                 
                 token = strtok(NULL, " ");                          // Get the next token (word)
                 j++;
             }
             printf("Les etats accepteurs sont: ");
-            displayItem(automate.accepted_state);
+            displayFirstAcceptedState(automate.first_accepted_state);
             printf("\n");
         }
         if (i >= 2)
