@@ -17,7 +17,7 @@ typedef struct FirstAcceptedState FirstAcceptedState;
 struct Transitions
 {
     int etatDeparts;
-    char *transition;
+    char transition;
     int prochainEtat;
     struct Transitions *next;
 };

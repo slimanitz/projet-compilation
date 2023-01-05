@@ -66,7 +66,6 @@ void displayFirstAcceptedState(FirstAcceptedState *first_accepted_state)
 
     while (state != NULL)
     {
-        printf("%d ", state->state);
         state = state->next;
     }
 }
@@ -93,7 +92,7 @@ FirstTransition *initTransitions()
 }
 
 // Function that insert an acceted state in the
-void insertTransitions(FirstTransition *first_transition, int etatDeparts,char *transition,int prochainEtat)
+void insertTransition(FirstTransition *first_transition, int etatDeparts,char transition,int prochainEtat)
 {
     /* Création du nouvel élément */
     Transitions *new = malloc(sizeof(*new));
@@ -142,8 +141,10 @@ void displayTransitions(FirstTransition *first_transition)
 
     while (transition != NULL)
     {
-        printf("De l'état %d a %d on a %s\n", transition->etatDeparts, transition->prochainEtat, transition->transition);
+        printf("De l'état %d a %d on a: %c\n", transition->etatDeparts, transition->prochainEtat, transition->transition);
         transition = transition->next;
     }
 }
+
+
 
