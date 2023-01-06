@@ -21,7 +21,7 @@ FirstAcceptedState *initialisation()
 }
 
 // Function that insert an acceted state in the
-void insertion(FirstAcceptedState *first_accepted_state, int new_state)
+void insertionOfAcceptedState(FirstAcceptedState *first_accepted_state, int new_state)
 {
     /* Création du nouvel élément */
     AcceptedStates *new = malloc(sizeof(*new));
@@ -90,7 +90,7 @@ FirstTransition *initTransitions()
 }
 
 // Function that insert an acceted state in the
-void insertTransition(FirstTransition *first_transition, int starting_state, char character, int next_state)
+void insertOfTransition(FirstTransition *first_transition, int starting_state, char character, int next_state)
 {
     /* Création du nouvel élément */
     Transitions *new = malloc(sizeof(*new));

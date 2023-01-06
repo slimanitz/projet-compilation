@@ -113,7 +113,7 @@ void parseAutomate(char *nomAutomate)
                 {
                     token[len - 1] = '\0';
                 }
-                insertion(automate.first_accepted_state, atoi(token));  
+                insertionOfAcceptedState(automate.first_accepted_state, atoi(token));  
                 token = strtok(NULL, " ");                          // Get the next token (word)
                 j++;
             }
@@ -155,7 +155,7 @@ void parseAutomate(char *nomAutomate)
                 token = strtok(NULL, " "); // Get the next token (word)
                 j++;
             }
-            insertTransition(automate.first_transition,starting_state,transition,next_state);
+            insertOfTransition(automate.first_transition,starting_state,transition,next_state);
 
         }
         i++;
