@@ -3,15 +3,7 @@
 #include <string.h>
 #include "methods.h"
 
-struct Automate
-{
-    int nbEtats;
-    FirstAcceptedState *first_accepted_state;
-    int nbTransitions;
-    FirstTransition *first_transition;
-  
-};
-struct Automate automate;
+Automate automate;
 
 void parseAutomate(char *nomAutomate);
 void executionAutomateSurMot(char *mot);
@@ -31,7 +23,7 @@ int main(int argc, char *argv[])
 //     {
 //         printf("Here: %d,There: %d\n", i, automate.nbTransitions);
 
-//         if (etat == automate.transitions[i].etatDeparts)
+//         if (etat == automate.transitions[i].starting_state)
 //         {
 //             if (strcmp(c, automate.transitions[i].transition))
 //             {
@@ -39,7 +31,7 @@ int main(int argc, char *argv[])
 //                 return 1;
 //             }
 //         }
-//         else if (etat < automate.transitions[i].etatDeparts)
+//         else if (etat < automate.transitions[i].starting_state)
 //         {
 //             printf("L'etat: %d, ne fait pas  passer la lettre: %c\n", etat, *c);
 //             return 0;
@@ -62,14 +54,7 @@ void executionAutomateSurMot(char *mot)
     }
 
     Transitions *transition = automate.first_transition->first;
-
-    
-
-    
-    
-    
 }
-
 
 int checkIfStateAccepteur(int etat){
 
@@ -141,8 +126,8 @@ void parseAutomate(char *nomAutomate)
             automate.nbTransitions++;
             char *token = strtok(line, " ");
             int j = 0;
-            int etatDeparts =0;
-            int prochainEtat =0;
+            int starting_state =0;
+            int next_state =0;
             char transition;
             while (token != NULL)
             {
@@ -155,13 +140,13 @@ void parseAutomate(char *nomAutomate)
                 switch (j)
                 {
                 case 0:
-                    etatDeparts = atoi(token);
+                    starting_state = atoi(token);
                     break;
                 case 1:
                     transition = token[0];
                     break;
                 case 2:
-                    prochainEtat = atoi(token);
+                    next_state = atoi(token);
                     break;
 
                 default:
@@ -170,7 +155,7 @@ void parseAutomate(char *nomAutomate)
                 token = strtok(NULL, " "); // Get the next token (word)
                 j++;
             }
-            insertTransition(automate.first_transition,etatDeparts,transition,prochainEtat);
+            insertTransition(automate.first_transition,starting_state,transition,next_state);
 
         }
         i++;
@@ -179,5 +164,3 @@ void parseAutomate(char *nomAutomate)
     displayTransitions(automate.first_transition);
     fclose(file);
 }
-
-
