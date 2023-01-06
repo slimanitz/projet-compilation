@@ -16,6 +16,9 @@ Automate determinisationOfAutomaton(Automate automaton)
     Transitions *transitions = automaton.first_transition->first;
 
     int increment = 0; // variable that will give total number of transition that has as starting state the initial state
+    int k;
+
+    char character;
 
     while (transitions != NULL)
     {
@@ -27,16 +30,30 @@ Automate determinisationOfAutomaton(Automate automaton)
         transitions = transitions->next_transition;
     }
 
+    transitions = first_transition->first;
     int **grouped_states = create_matrix(automaton.nb_characters, increment);
 
     for (int i = 0; i < automaton.nb_characters; i++)
     {
-        grouped_states[i] = automaton.characters[i];
+        k = 0;
+        character = automaton.characters[i];
+        while (transitions != NULL)
+        {
+            if (strcmp(&character, transitions->character))
+            {
+                grouped_states[i][k] = transitions->next_state;
+                k++;
+            }
+            transitions = transitions->next_transition;
+        }
     }
 
-    while (first_transition != NULL)
+    for (int i = 0; i < automaton.nb_characters; i++)
     {
-        
+        for (int j = 0; i < increment; j++)
+        {
+            print()
+        }
     }
 
     for (int i = 0; i < automaton.nb_characters; i++)
