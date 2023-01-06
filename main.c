@@ -100,6 +100,7 @@ void parseAutomate(char *nomAutomate)
         {
             automate.nbEtats = atoi(line);
             printf("Le nombre d'états est: %d\n", automate.nbEtats);
+            automate.characters = malloc(sizeof(automate.nbEtats));     // Initialisation of the size of the array that will store that characters of the automate
         }
         if (i == 1)
         {
@@ -143,11 +144,11 @@ void parseAutomate(char *nomAutomate)
                     starting_state = atoi(token);
                     break;
                 case 1:
-                    transition = token;
-                    int test = 0;                              // use to test of the character exists or not in the character arrays
+                    transition = token[0];
+                    int test = 0;                              // use to test if the character exists or not in the character arrays
                     for (int i = 0; i < automate.nbEtats; i++) // This is for loop is extract of the characters of the automaton and store in the array character declared above
                     {
-                        if (strcmp(token, automate.characters[i]))
+                        if (strcmp(token, &automate.characters[i]))
                         {
                             test = 1;
                         }
@@ -156,9 +157,9 @@ void parseAutomate(char *nomAutomate)
                     {
                         if (automate.nbEtats <= automate.nb_characters)
                         {
-                            automate.characters = malloc(sizeof(automate.nbEtats * 2));
+                            automate.characters = malloc(sizeof(automate.nbEtats * 4));
                         }
-                        automate.characters[automate.nb_characters] = token;
+                        automate.characters[automate.nb_characters] = token[0];
                         automate.nb_characters++;
                     }
                     break;
@@ -174,7 +175,6 @@ void parseAutomate(char *nomAutomate)
             }
             automate.characters = malloc(sizeof(automate.nb_characters - 1));
             insertOfTransition(automate.first_transition,starting_state,transition,next_state);
-
         }
         i++;
     }
