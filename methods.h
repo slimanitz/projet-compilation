@@ -141,3 +141,16 @@ void displayTransitions(FirstTransition *first_transition)
         transition = transition->next_transition;
     }
 }
+
+// Function that creates a two dimensional matrix
+int **create_matrix(int m, int n)
+{
+    int **matrix;
+
+    matrix = malloc(sizeof(int *) * m);
+
+    for (int i = 0; i < m; i++)
+        matrix[i] = malloc(sizeof(int) * n);
+
+    return matrix;
+}

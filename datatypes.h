@@ -38,7 +38,6 @@ struct Automate
     char *characters;  // One dimensional array to store characters
     int nb_characters; // This variable will give us the total number of characters in the automaton
     FirstAcceptedState *first_accepted_state;
-    // int etatsAccepteurs[20];
     int nbTransitions;
     FirstTransition *first_transition;
 };

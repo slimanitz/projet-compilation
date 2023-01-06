@@ -143,7 +143,24 @@ void parseAutomate(char *nomAutomate)
                     starting_state = atoi(token);
                     break;
                 case 1:
-                    transition = token[0];
+                    transition = token;
+                    int test = 0;                              // use to test of the character exists or not in the character arrays
+                    for (int i = 0; i < automate.nbEtats; i++) // This is for loop is extract of the characters of the automaton and store in the array character declared above
+                    {
+                        if (strcmp(token, automate.characters[i]))
+                        {
+                            test = 1;
+                        }
+                    }
+                    if (!test)
+                    {
+                        if (automate.nbEtats <= automate.nb_characters)
+                        {
+                            automate.characters = malloc(sizeof(automate.nbEtats * 2));
+                        }
+                        automate.characters[automate.nb_characters] = token;
+                        automate.nb_characters++;
+                    }
                     break;
                 case 2:
                     next_state = atoi(token);
@@ -155,6 +172,7 @@ void parseAutomate(char *nomAutomate)
                 token = strtok(NULL, " "); // Get the next token (word)
                 j++;
             }
+            automate.characters = malloc(sizeof(automate.nb_characters - 1));
             insertOfTransition(automate.first_transition,starting_state,transition,next_state);
 
         }

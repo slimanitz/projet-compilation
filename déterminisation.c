@@ -36,6 +36,7 @@ Automate determinisationOfAutomaton(Automate automaton)
 
     while (first_transition != NULL)
     {
+        
     }
 
     for (int i = 0; i < automaton.nb_characters; i++)
