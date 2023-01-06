@@ -157,7 +157,7 @@ void parseAutomate(char *nomAutomate)
                     {
                         if (automate.nbEtats <= automate.nb_characters)
                         {
-                            automate.characters = malloc(sizeof(automate.nbEtats * 4));
+                            automate.characters = malloc(sizeof(automate.nbEtats * 2));
                         }
                         automate.characters[automate.nb_characters] = token[0];
                         automate.nb_characters++;
