@@ -90,7 +90,7 @@ FirstTransition *initTransitions()
 }
 
 // Function that insert an acceted state in the
-void insertOfTransition(FirstTransition *first_transition, int starting_state, char character, int next_state)
+void insertionOfTransition(FirstTransition *first_transition, int starting_state, char character, int next_state)
 {
     /* Création du nouvel élément */
     Transitions *new = malloc(sizeof(*new));
@@ -143,11 +143,11 @@ void displayTransitions(FirstTransition *first_transition)
 }
 
 // Function that creates a two dimensional matrix
-int **create_matrix(int m, int n)
+char **create_matrix(int m, int n)
 {
-    int **matrix;
+    char **matrix;
 
-    matrix = malloc(sizeof(int *) * m);
+    matrix = malloc(sizeof(char *) * m);
 
     for (int i = 0; i < m; i++)
         matrix[i] = malloc(sizeof(int) * n);
