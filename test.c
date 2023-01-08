@@ -112,6 +112,7 @@ void determinisationOfAutomaton(Automate automaton)
     int temp = 0;
     for (int i = 0; i < size_regrouped_state; i++) // This for loop is to insert the new states in the struct regrouped_states
     {
+        printf("%d \n", i);
         new_automaton.states[nb_etat] = regrouped_states[i].new_state;
         nb_etat++;
         temp++;
@@ -122,32 +123,64 @@ void determinisationOfAutomaton(Automate automaton)
     nb_etat++;
     int new_state = 0;
     transitions = first_transition->first;
-    int *next_states = malloc(sizeof(int) * longest_group);
-    for (int i = 0; i < nb_etat; i++)
+    int *next_states;
+    for (int i = 0; i < 1; i++)
     {
+        // for (int j = 0; j < temp; j++)
+        // {
+        //     if (new_automaton.states[i] == regrouped_states[j].new_state)
+        //     {
+        //         // next_states = malloc(sizeof(int) * regrouped_states[j].size);
+        //     }
+        // }
         for (int k = 0; k < automaton.nb_characters; k++)
         {
             increment = 0;
-            if (transitions == NULL)
-            {
-                transitions = first_transition->first;
-            }
             while (transitions != NULL)
             {
                 if (new_automaton.states[i] == transitions->starting_state)
                 {
                     if (automaton.characters[k] == transitions->character)
                     {
-                        next_states[increment] = transitions->next_state;
+                        // next_states[i] = transitions->next_state;
                         increment++;
                     }
                 }
                 transitions = transitions->next_transition;
             }
+            test = 0;
+            new_state = 0;
             if (increment > 1)
             {
-                for (int j = 0; j < 4; j++)
-                    insertionOfTransition(new_automaton.first_transition, new_automaton.states[i], automaton.characters[k], next_states[0]);
+                for (int j = 0; j < 1; j++)
+                {
+                    // for (int l = 0; l < longest_group; l++)
+                    // {
+                    //     // if (next_states[l] == regrouped_states[j].states[l])
+                    //     // {
+                    //     //     new_state = regrouped_states[j].new_state;
+                    //     //     test++;
+                    //     // }
+                    // }
+                }
+                // if (test == increment)
+                // {
+                //     insertionOfTransition(new_automaton.first_transition, new_automaton.states[i], automaton.characters[k], new_state);
+                // }
+                // else
+                // {
+                //     printf("\n\n");
+                //     printf("\n\n");
+                //     printf("This is a situation where we have not manage all the grouping of states !!!");
+                //     printf("\n\n");
+                //     printf("\n\n");
+                //     exit(EXIT_FAILURE);
+                // }
+            }
+            else
+            {
+                // insertionOfTransition(new_automaton.first_transition, new_automaton.states[i], automaton.characters[k], next_states[0]);
+                insertionOfTransition(new_automaton.first_transition, new_automaton.states[i], automaton.characters[k], 1);
             }
         }
     }

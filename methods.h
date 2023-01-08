@@ -38,7 +38,7 @@ void insertionOfAcceptedState(FirstAcceptedState *first_accepted_state, int new_
 }
 
 // Function that deletes the first element of the first_accepted_state
-void deletion(FirstAcceptedState *first_accepted_state)
+void deletionOfAcceptedState(FirstAcceptedState *first_accepted_state)
 {
     if (first_accepted_state == NULL)
     {
@@ -150,7 +150,7 @@ char **create_matrix(int m, int n)
     matrix = malloc(sizeof(char *) * m);
 
     for (int i = 0; i < m; i++)
-        matrix[i] = malloc(sizeof(int) * n);
+        matrix[i] = malloc(sizeof(char) * n);
 
     return matrix;
 }

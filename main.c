@@ -93,7 +93,9 @@ void parseAutomate(char *nomAutomate)
     // Declare a buffer for reading the file
     char line[1024];
     int i = 0;
-    char space = ' '; // This variable is the one used to initialise the array of characters of the automaton
+    int test = 1; // use to test if the character exists or not in the character arrays
+    int nb_etats = 0;
+    automate.biggest_state = 0;
     // Read the file line by line
     while (fgets(line, sizeof(line), file))
     {
@@ -105,7 +107,12 @@ void parseAutomate(char *nomAutomate)
             automate.characters = malloc(sizeof(char) * automate.nbEtats); // Initialisation of the size of the array that will store that characters of the automate
             for (int i = 0; i < automate.nbEtats; i++)
             {
-                automate.characters[i] = space;
+                automate.characters[i] = ' ';
+            }
+            automate.states = malloc(sizeof(int) * automate.nbEtats); // Initialisation of the size of the array that will store that characters of the automate
+            for (int i = 0; i < (automate.nbEtats - 1); i++)
+            {
+                automate.states[i] = -1;
             }
         }
         if (i == 1)
@@ -143,15 +150,32 @@ void parseAutomate(char *nomAutomate)
                 {
                     token[len - 1] = '\0';
                 }
-
+                test = 1;
                 switch (j)
                 {
                 case 0:
                     starting_state = atoi(token);
+                    if (starting_state > automate.biggest_state)
+                    {
+                        automate.biggest_state = starting_state;
+                    }
+                    test = 1;
+                    for (int i = 0; i < automate.nbEtats; i++)
+                    {
+                        if (atoi(token) == automate.states[i])
+                            ;
+                        {
+                            test = 0;
+                        }
+                    }
+                    if (test)
+                    {
+                        automate.states[nb_etats] = atoi(token);
+                        nb_etats++;
+                    }
                     break;
                 case 1:
                     transition = token[0];
-                    int test = 1;                              // use to test if the character exists or not in the character arrays
                     for (int i = 0; i < automate.nbEtats; i++) // This for loop is to extract the characters of the automaton and store in the array character declared above
                     {
                         if (token[0] == automate.characters[i])
@@ -171,6 +195,23 @@ void parseAutomate(char *nomAutomate)
                     break;
                 case 2:
                     next_state = atoi(token);
+                    if (next_state > automate.biggest_state)
+                    {
+                        automate.biggest_state = next_state;
+                    }
+                    test = 1;
+                    for (int i = 0; i < automate.nbEtats; i++)
+                    {
+                        if (atoi(token) == automate.states[i])
+                        {
+                            test = 0;
+                        }
+                    }
+                    if (test)
+                    {
+                        automate.states[nb_etats] = atoi(token);
+                        nb_etats++;
+                    }
                     break;
                 default:
                     break;
@@ -182,11 +223,8 @@ void parseAutomate(char *nomAutomate)
         }
         i++;
     }
-    automate.characters = malloc(sizeof(automate.nb_characters - 1));
-    printf("Les transitions sont: \n");
+    // printf("Les transitions sont: \n");
     // displayTransitions(automate.first_transition);
-    printf("%c ", automate.characters[0]);
-    printf("%c ", automate.characters[1]);
     printf("Les groupes sont: \n");
     determinisationOfAutomaton(automate);
     fclose(file);
