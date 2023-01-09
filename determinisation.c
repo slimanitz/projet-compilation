@@ -15,14 +15,19 @@ void determinisationOfAutomaton(Automate automaton)
     Transitions *transitions = automaton.first_transition->first;
 
     RegroupedStates *regrouped_states = malloc(sizeof(RegroupedStates) * automaton.nbEtats);
+    for (int i = 0; i < automaton.nbEtats; i++)
+    {
+        regrouped_states[i].states = malloc(sizeof(int) * automaton.nbEtats);
+    }
 
     Automate new_automaton;
     new_automaton.first_transition = malloc(sizeof(char) * automaton.nbTransitions);
     new_automaton.characters = malloc(sizeof(char) * automaton.nbEtats);
     new_automaton.characters = automaton.characters;
     new_automaton.nb_characters = automaton.nb_characters;
+    new_automaton.states = malloc(sizeof(int) * 20);
 
-    for (int i = 0; i < automaton.nbEtats; i++) // This for loop is for the initialisation of the size of the states
+        for (int i = 0; i < automaton.nbEtats; i++) // This for loop is for the initialisation of the size of the states
     {
         regrouped_states[i].states = malloc(sizeof(int) * (automaton.nbEtats * 2));
     }
