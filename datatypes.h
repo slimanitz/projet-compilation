@@ -5,14 +5,12 @@ struct AcceptedStates
 };
 typedef struct AcceptedStates AcceptedStates;
 
-
 struct FirstAcceptedState
 {
     AcceptedStates *first;
     int list_size;
 };
 typedef struct FirstAcceptedState FirstAcceptedState;
-
 
 struct Transitions
 {
@@ -23,8 +21,6 @@ struct Transitions
 };
 typedef struct Transitions Transitions;
 
-
-
 struct FirstTransition
 {
     Transitions *first;
@@ -34,11 +30,11 @@ typedef struct FirstTransition FirstTransition;
 
 struct Automate
 {
-    int nbEtats;
+    int state_number;
     char *characters;  // One dimensional array to store characters
     int nb_characters; // This variable will give us the total number of characters in the automaton
     FirstAcceptedState *first_accepted_state;
-    int nbTransitions;
+    int transition_number;
     FirstTransition *first_transition;
 };
 typedef struct Automate Automate;
