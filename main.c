@@ -112,10 +112,10 @@ void parseAutomate(char *nomAutomate)
                 j++;
             }
             automate.accepted_states = realloc(automate.accepted_states, sizeof(int) * j);
-            // printf("\n\n");
-            // printf("Les etats accepteurs sont: ");
-            // for (int i = 0; i < j; i++)
-            //     printf("%d ", automate.accepted_states[i]);
+            printf("\n");
+            printf("Les etats accepteurs sont: ");
+            for (int i = 0; i < j; i++)
+                printf("%d ", automate.accepted_states[i]);
             printf("\n");
         }
         if (i >= 2)
@@ -210,9 +210,12 @@ void parseAutomate(char *nomAutomate)
         i++;
     }
     automate.transitions = realloc(automate.transitions, sizeof(Transitions) * increment);
-    // printf("Les transitions sont: \n");
-    // printf("\n\n\n");
-    printf("Les transitions sont: \n");
-    determinisationOfAutomaton(automate);
+    printf("\n");
+    printf("Les transitions sont: \n\n");
+    for (int i = 0; i < automate.nb_transitions; i++)
+    {
+        printf("De l'état %d a %d on a: %c\n", automate.transitions[i].starting_state, automate.transitions[i].next_state, automate.transitions[i].character);
+    }
+    printf("\n");
     fclose(file);
 }
