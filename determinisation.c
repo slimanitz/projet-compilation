@@ -112,101 +112,69 @@ void determinisationOfAutomaton(Automate automaton)
         temp++;
     }
 
+    RegroupedStates **group_of_states = malloc(sizeof(RegroupedStates *) * 10);
+    for (int i = 0; i < automaton.nbEtats; i++)
+    {
+        group_of_states[i] = malloc(sizeof(int) * 10);
+        for (int j = 0; j < automaton.nbEtats; j++)
+        {
+            group_of_states[i][j].states = malloc(sizeof(int) * 10);
+        }
+    }
+
+    for (int i = 0; i < automaton.nb_characters; i++)
+    {
+        for (int j = 0; j < automaton.nbEtats; j++)
+        {
+            for (int k = 0; k < automaton.nbEtats; k++)
+            {
+                group_of_states[i][j].states[k] = -1;
+            }
+        }
+    }
+
     new_automaton.states[nb_etat] = biggest_state + 1;
     nb_etat++;
     new_automaton.nbEtats = nb_etat;
-    int id = 0;
     int new_state = 0;
-    int *next_states = malloc(sizeof(int) * longest_group);
 
-    for (int i = 0; i < nb_etat; i++)
+    for (int k = 0; k < automaton.nb_characters; k++)
     {
-        test = 0;
-        for (int k = 0; k < automaton.nb_characters; k++)
+        for (int i = 0; i < nb_etat; i++)
         {
             increment = 0;
-
             for (int j = 0; j < automaton.nb_transitions; j++)
             {
-                for (int t = 0; t < size_regrouped_state; t++)
-                {
-                    // printf(" %d   %d\n ", new_automaton.states[i], regrouped_states[t].new_state);
-                    if (new_automaton.states[i] == regrouped_states[t].new_state)
-                    {
-                        for (int n = 0; n < regrouped_states[t].size; n++)
-                        {
-                            for (int f = 0; f < automaton.nb_characters; f++)
-                            {
-                                new_state = searchMethod(automaton, regrouped_states[t].states[n], automaton.characters[f], regrouped_states, size_regrouped_state, longest_group);
-                                new_automaton.transitions[i].starting_state = new_automaton.states[i];
-                                new_automaton.transitions[i].character = automaton.characters[f];
-                                new_automaton.transitions[i].next_state = new_state;
-                                // printf("De l'état %d a %d on a: %c\n", new_automaton.transitions[i].starting_state, new_automaton.transitions[i].next_state, new_automaton.transitions[i].character);
-                            }
-                        }
-                        // printf(" %d   %d\n ", new_automaton.states[i], regrouped_states[t].new_state);
-                        // printf("Hello \n");
-                        test = 1;
-                    }
-                }
+
                 if (new_automaton.states[i] == automaton.transitions[j].starting_state)
                 {
                     if (automaton.characters[k] == automaton.transitions[j].character)
                     {
-                        // printf("Third    %d\n", automaton.transitions[j].starting_state);
-                        next_states[increment] = automaton.transitions[j].next_state;
+                        group_of_states[k][i].states[increment] = automaton.transitions[j].next_state;
                         increment++;
                     }
                 }
-            }
-
-            if (test != 1)
-            {
-                // printf("Hello   %d \n", new_automaton.states[i]);
-                if (increment > 1)
-                {
-                    for (int h = 0; h < temp; h++)
-                    {
-                        for (int j = 0; j < longest_group; j++)
-                        {
-                            if (next_states[h] == regrouped_states[h].states[j])
-                            {
-                                new_state = regrouped_states[h].new_state;
-                            }
-                        }
-                    }
-                    new_automaton.transitions[i].starting_state = new_automaton.states[i];
-                    new_automaton.transitions[i].character = automaton.characters[k];
-                    new_automaton.transitions[i].next_state = new_state;
-                    // printf("First   %d \n", new_state);
-                    // printf("First De l'état %d a %d on a: %c\n", new_automaton.transitions[i].starting_state, new_automaton.transitions[i].next_state, new_automaton.transitions[i].character);
-                }
-                else
-                {
-                    new_automaton.transitions[i].starting_state = new_automaton.states[i];
-                    new_automaton.transitions[i].character = automaton.characters[k];
-                    new_automaton.transitions[i].next_state = next_states[0];
-                    // printf("second   %d \n", next_states[0]);
-                    // printf("Second De l'état %d a %d on a: %c\n", new_automaton.transitions[i].starting_state, new_automaton.transitions[i].next_state, new_automaton.transitions[i].character);
-                }
+                group_of_states[k][i].size = increment;
+                group_of_states[k][i].new_state = new_automaton.states[i];
             }
         }
     }
 
     printf("\n");
 
-    // for (int i = 0; i < size_regrouped_state; i++)
-    // {
-    //     for (int j = 0; j < longest_group; j++)
-    //     {
-    //         printf("%d ", regrouped_states[i].new_state);
-    //     }
-    // }
-
-    for (int i = 0; i < new_automaton.nbEtats; i++)
+    for (int i = 0; i < automaton.nb_characters; i++)
     {
+        printf("%c \n", automaton.characters[i]);
+        for (int j = 0; j < automaton.nbEtats; j++)
+        {
+            printf("Pour l'état %d on a : \n", new_automaton.states[j]);
+            for (int k = 0; k < automaton.nbEtats; k++)
+            {
+                printf("%d ", group_of_states[i][j].states[k]);
+            }
+            printf("\n");
+        }
         // printf("%d   ", new_automaton.states[i]);
-        // printf("De l'état %d a %d on a: %c\n", new_automaton.transitions[i].starting_state, new_automaton.transitions[i].next_state, new_automaton.transitions[i].character);
     }
 }
 
