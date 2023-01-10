@@ -1,7 +1,7 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
-#include "methods.h"
+#include "determinisation.c"
 
 Automate automate;
 
@@ -12,16 +12,16 @@ int main(int argc, char *argv[])
 {
     char *nomAutomate = argv[1];
     parseAutomate(nomAutomate);
-    //executionAutomateSurMot("aa");
+    // executionAutomateSurMot("aa");
 
     return 0;
 }
 
 // int checkIfTransitionPass(char *c, int etat)
 // {
-//     for (int i = 0; i < automate.nbTransitions; i++)
+//     for (int i = 0; i < automate.nb_transactions; i++)
 //     {
-//         printf("Here: %d,There: %d\n", i, automate.nbTransitions);
+//         printf("Here: %d,There: %d\n", i, automate.nb_transactions);
 
 //         if (etat == automate.transitions[i].starting_state)
 //         {
@@ -47,7 +47,6 @@ void executionAutomateSurMot(char *mot)
     strcpy(lettreMot, mot);
     int etatDansLeMot = 0;
 
-
     if (automate.first_transition == NULL)
     {
         exit(EXIT_FAILURE);
@@ -56,32 +55,12 @@ void executionAutomateSurMot(char *mot)
     Transitions *transition = automate.first_transition->first;
 }
 
-int checkIfStateAccepteur(int etat){
-
-
-    if (automate.first_accepted_state == NULL)
-    {
-        exit(EXIT_FAILURE);
-    }
-
-    AcceptedStates *state = automate.first_accepted_state->first;
-
-    while (state != NULL)
-    {
-        if(state->state == etat ){return 1;}
-        state = state->next;
-    }
-    return 0;
-}
-
-// int checkIfAccepteur(int numeroEtat){
-
-// }
 void parseAutomate(char *nomAutomate)
 {
     FILE *file = fopen(nomAutomate, "r");
-    automate.first_accepted_state = malloc(sizeof(*automate.first_accepted_state));
     automate.first_transition = malloc(sizeof(*automate.first_transition));
+    automate.transitions = malloc(sizeof(Transitions) * 20);
+    automate.nb_characters = 0;
     // Check if the file was successfully opened
     if (file == NULL)
     {
@@ -92,6 +71,10 @@ void parseAutomate(char *nomAutomate)
     // Declare a buffer for reading the file
     char line[1024];
     int i = 0;
+    int test = 1; // use to test if the character exists or not in the character arrays
+    int nb_etats = 0;
+    automate.biggest_state = 0;
+    int increment = 0; // To increment the indexes of the array transitions in the automaton
     // Read the file line by line
     while (fgets(line, sizeof(line), file))
     {
@@ -99,8 +82,18 @@ void parseAutomate(char *nomAutomate)
         if (i == 0)
         {
             automate.nbEtats = atoi(line);
-            printf("Le nombre d'états est: %d\n", automate.nbEtats);
-            automate.characters = malloc(sizeof(automate.nbEtats));     // Initialisation of the size of the array that will store that characters of the automate
+            // printf("Le nombre d'états est: %d\n\n", automate.nbEtats);
+            automate.characters = malloc(sizeof(char) * automate.nbEtats); // Initialisation of the size of the array that will store that characters of the automate
+            for (int i = 0; i < automate.nbEtats; i++)
+            {
+                automate.characters[i] = ' ';
+            }
+            automate.states = malloc(sizeof(int) * automate.nbEtats); // Initialisation of the size of the array that will store that characters of the automate
+            for (int i = 0; i < (automate.nbEtats - 1); i++)
+            {
+                automate.states[i] = -1;
+            }
+            automate.accepted_states = malloc(sizeof(int) * automate.nbEtats);
         }
         if (i == 1)
         {
@@ -114,21 +107,24 @@ void parseAutomate(char *nomAutomate)
                 {
                     token[len - 1] = '\0';
                 }
-                insertionOfAcceptedState(automate.first_accepted_state, atoi(token));  
-                token = strtok(NULL, " ");                          // Get the next token (word)
+                automate.accepted_states[j] = atoi(token);
+                token = strtok(NULL, " "); // Get the next token (word)
                 j++;
             }
-            printf("Les etats accepteurs sont: ");
-            displayFirstAcceptedState(automate.first_accepted_state);
+            automate.accepted_states = realloc(automate.accepted_states, sizeof(int) * j);
+            // printf("\n\n");
+            // printf("Les etats accepteurs sont: ");
+            // for (int i = 0; i < j; i++)
+            //     printf("%d ", automate.accepted_states[i]);
             printf("\n");
         }
         if (i >= 2)
         {
-            automate.nbTransitions++;
+            automate.nb_transitions++;
             char *token = strtok(line, " ");
             int j = 0;
-            int starting_state =0;
-            int next_state =0;
+            int starting_state = 0;
+            int next_state = 0;
             char transition;
             while (token != NULL)
             {
@@ -137,23 +133,40 @@ void parseAutomate(char *nomAutomate)
                 {
                     token[len - 1] = '\0';
                 }
-
+                test = 1;
                 switch (j)
                 {
                 case 0:
                     starting_state = atoi(token);
+                    if (starting_state > automate.biggest_state)
+                    {
+                        automate.biggest_state = starting_state;
+                    }
+                    test = 1;
+                    for (int i = 0; i < automate.nbEtats; i++)
+                    {
+                        if (atoi(token) == automate.states[i])
+                            ;
+                        {
+                            test = 0;
+                        }
+                    }
+                    if (test)
+                    {
+                        automate.states[nb_etats] = atoi(token);
+                        nb_etats++;
+                    }
                     break;
                 case 1:
                     transition = token[0];
-                    int test = 0;                              // use to test if the character exists or not in the character arrays
-                    for (int i = 0; i < automate.nbEtats; i++) // This is for loop is extract of the characters of the automaton and store in the array character declared above
+                    for (int i = 0; i < automate.nbEtats; i++) // This for loop is to extract the characters of the automaton and store in the array character declared above
                     {
-                        if (strcmp(token, &automate.characters[i]))
+                        if (token[0] == automate.characters[i])
                         {
-                            test = 1;
+                            test = 0;
                         }
                     }
-                    if (!test)
+                    if (test)
                     {
                         if (automate.nbEtats <= automate.nb_characters)
                         {
@@ -165,20 +178,41 @@ void parseAutomate(char *nomAutomate)
                     break;
                 case 2:
                     next_state = atoi(token);
+                    if (next_state > automate.biggest_state)
+                    {
+                        automate.biggest_state = next_state;
+                    }
+                    test = 1;
+                    for (int i = 0; i < automate.nbEtats; i++)
+                    {
+                        if (atoi(token) == automate.states[i])
+                        {
+                            test = 0;
+                        }
+                    }
+                    if (test)
+                    {
+                        automate.states[nb_etats] = atoi(token);
+                        nb_etats++;
+                    }
                     break;
-
                 default:
                     break;
                 }
                 token = strtok(NULL, " "); // Get the next token (word)
                 j++;
             }
-            automate.characters = malloc(sizeof(automate.nb_characters - 1));
-            insertOfTransition(automate.first_transition,starting_state,transition,next_state);
+            automate.transitions[increment].starting_state = starting_state;
+            automate.transitions[increment].character = transition;
+            automate.transitions[increment].next_state = next_state;
+            increment++;
         }
         i++;
     }
+    automate.transitions = realloc(automate.transitions, sizeof(Transitions) * increment);
+    // printf("Les transitions sont: \n");
+    // printf("\n\n\n");
     printf("Les transitions sont: \n");
-    displayTransitions(automate.first_transition);
+    determinisationOfAutomaton(automate);
     fclose(file);
 }
