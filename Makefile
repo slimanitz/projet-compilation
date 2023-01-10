@@ -1,2 +1,2 @@
-main: main.c déterminisation.c datatypes.h methods.h
-	gcc -o DetMin main.c déterminisation.c  -I.
+main: main.c determinisation.c datatypes.h methods.h
+	gcc -o DetMin main.c determinisation.c  -I.
